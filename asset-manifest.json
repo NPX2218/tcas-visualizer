@@ -1,20 +1,18 @@
 {
   "files": {
-    "main.css": "/tcas-visualizer/static/css/main.6a82c0ba.css",
-    "main.js": "/tcas-visualizer/static/js/main.68dac957.js",
-    "static/js/346.00e08200.chunk.js": "/tcas-visualizer/static/js/346.00e08200.chunk.js",
+    "main.css": "/tcas-visualizer/static/css/main.6c221f8f.css",
+    "main.js": "/tcas-visualizer/static/js/main.2c9be285.js",
     "static/js/585.470ce8d5.chunk.js": "/tcas-visualizer/static/js/585.470ce8d5.chunk.js",
     "static/js/204.2f119d80.chunk.js": "/tcas-visualizer/static/js/204.2f119d80.chunk.js",
     "static/media/pendulum_logo.gif": "/tcas-visualizer/static/media/pendulum_logo.9345dd9d5cf27a38f842.gif",
     "index.html": "/tcas-visualizer/index.html",
-    "main.6a82c0ba.css.map": "/tcas-visualizer/static/css/main.6a82c0ba.css.map",
-    "main.68dac957.js.map": "/tcas-visualizer/static/js/main.68dac957.js.map",
-    "346.00e08200.chunk.js.map": "/tcas-visualizer/static/js/346.00e08200.chunk.js.map",
+    "main.6c221f8f.css.map": "/tcas-visualizer/static/css/main.6c221f8f.css.map",
+    "main.2c9be285.js.map": "/tcas-visualizer/static/js/main.2c9be285.js.map",
     "585.470ce8d5.chunk.js.map": "/tcas-visualizer/static/js/585.470ce8d5.chunk.js.map",
     "204.2f119d80.chunk.js.map": "/tcas-visualizer/static/js/204.2f119d80.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.6a82c0ba.css",
-    "static/js/main.68dac957.js"
+    "static/css/main.6c221f8f.css",
+    "static/js/main.2c9be285.js"
   ]
 }
