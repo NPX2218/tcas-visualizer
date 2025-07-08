@@ -10,16 +10,6 @@ export const bibliographiesData = [
     link: "https://tailwindcss.com/",
   },
   {
-    name: "Figma",
-    author: "Dev Team",
-    link: "https://www.figma.com/",
-  },
-  {
-    name: "Locomotive",
-    author: "Dev Team",
-    link: "https://scroll.locomotive.ca/",
-  },
-  {
     name: "ChatGPT",
     author: "Open AI",
     link: "https://chatgpt.com/",
@@ -28,5 +18,10 @@ export const bibliographiesData = [
     name: "Derivation of Lagrange",
     author: "TheCaribbeanBookworm",
     link: "https://rb.gy/l6w3wa",
+  },
+  {
+    name: "TCAS Wikipedia",
+    author: "",
+    link: "https://en.wikipedia.org/wiki/Traffic_collision_avoidance_system",
   },
 ];

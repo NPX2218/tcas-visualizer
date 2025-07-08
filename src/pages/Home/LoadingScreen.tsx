@@ -1,11 +1,14 @@
+/////////////////////////////////////
+// IMPORTING MODULES
+/////////////////////////////////////
+
 import React, { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import {
   Scene,
   PerspectiveCamera,
   WebGLRenderer,
   DirectionalLight,
-  SphereGeometry,
   MeshPhysicalMaterial,
   Texture,
   Mesh,
@@ -14,19 +17,21 @@ import {
   PlaneGeometry,
   Clock,
   TextureLoader,
-  SRGBColorSpace,
   PCFSoftShadowMap,
   ACESFilmicToneMapping,
   Object3D,
 } from "three";
-
 import { OrbitControls } from "three-stdlib";
 import { GLTFLoader } from "three-stdlib";
 import { Mesh as ThreeMesh } from "three";
+import GlobeInstructions from "./GlobeInstructions";
+
+/////////////////////////////////////
+// CONSTANTS
+/////////////////////////////////////
 
 const basePath = "/tcas-visualizer";
-
-const letterVariants: any = {
+const letterVariants: Variants = {
   initial: { x: 0 },
   left: {
     x: "-200%",
@@ -42,16 +47,35 @@ const letterVariants: any = {
   },
 };
 
-const LoadingScreen: React.FC<any> = ({
+/////////////////////////////////////
+// INTERFACE: LOADING SCREEN
+/////////////////////////////////////
+
+interface LoadingScreenProps {
+  loading: boolean;
+  setLoading: (loading) => void;
+  children: React.ReactNode;
+  writingTransition: boolean;
+}
+
+/////////////////////////////////////
+// COMPONENT: LOADING SCREEN
+/////////////////////////////////////
+
+const LoadingScreen: React.FC<LoadingScreenProps> = ({
   loading,
   setLoading,
   children,
   writingTransition,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!loading) return;
+
+    /////////////////////////////////////
+    // INITIAL SCENE SETUP
+    /////////////////////////////////////
 
     const scene = new Scene();
     const camera = new PerspectiveCamera(
@@ -92,6 +116,10 @@ const LoadingScreen: React.FC<any> = ({
     let planeModel: Object3D;
     const planes: TCASPlane[] = [];
 
+    /////////////////////////////////////
+    // CLASS: TCAS PLANE
+    /////////////////////////////////////
+
     class TCASPlane {
       group: Group;
       velocity: Vector3;
@@ -109,6 +137,10 @@ const LoadingScreen: React.FC<any> = ({
         this.group.lookAt(this.group.position.clone().add(dir));
       }
     }
+
+    /////////////////////////////////////
+    // FUNCTION: SET PLANE COLOR
+    /////////////////////////////////////
 
     const setPlaneColor = (plane: TCASPlane) => {
       const colorMap = {
@@ -128,6 +160,10 @@ const LoadingScreen: React.FC<any> = ({
         }
       });
     };
+
+    /////////////////////////////////////
+    // FUNCTION: CHECK TCAS CONFLICTS
+    /////////////////////////////////////
 
     const checkTCASConflicts = (planes: TCASPlane[]) => {
       const threshold = 30;
@@ -164,6 +200,10 @@ const LoadingScreen: React.FC<any> = ({
         }
       }
     };
+
+    /////////////////////////////////////
+    // FUNCTION: MAKE PLANE
+    /////////////////////////////////////
 
     const makePlane = (model: Object3D, trailTex: Texture): Group => {
       const plane = model.clone();
@@ -232,6 +272,10 @@ const LoadingScreen: React.FC<any> = ({
       });
     })();
 
+    /////////////////////////////////////
+    // FUNCTION: HANDLE RESIZE
+    /////////////////////////////////////
+
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -246,7 +290,10 @@ const LoadingScreen: React.FC<any> = ({
     };
   }, []);
 
-  // Determine current animation state
+  /////////////////////////////////////
+  // FUNCTION: GET LETTER STATE
+  /////////////////////////////////////
+
   const getLetterState = (side: "left" | "right") => {
     if (loading) return "initial";
     if (writingTransition) return "back";
@@ -299,34 +346,10 @@ const LoadingScreen: React.FC<any> = ({
           </motion.span>
         </div>
       </div>
-      <div>
-        {!writingTransition && !loading && (
-          <div
-            className="absolute right-6 bottom-10 text-black text-lg flex flex-col items-center gap-2 z-50"
-            style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
-          >
-            <motion.div
-              initial={{ y: 0 }}
-              animate={{ y: [0, -10, 0] }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="text-sm"
-            >
-              ↓
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ duration: 10, repeat: Infinity }}
-            >
-              Scroll Down
-            </motion.div>
-          </div>
-        )}
-      </div>
+      <GlobeInstructions
+        writingTransition={writingTransition}
+        loading={loading}
+      />
       {/* Three.js canvas */}
       <div
         id="loading-canvas"
@@ -343,5 +366,9 @@ const LoadingScreen: React.FC<any> = ({
     </div>
   );
 };
+
+/////////////////////////////////////
+// EXPORTING LOADING SCREEN
+/////////////////////////////////////
 
 export default LoadingScreen;

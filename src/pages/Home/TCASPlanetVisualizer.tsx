@@ -1,57 +1,44 @@
-// ✅ TCASVisualizer.tsx — React version with full 3D spherical control
-// and animated planes using the orbiting method from original vanilla JS version
+/////////////////////////////////////
+// IMPORTING MODULES
+/////////////////////////////////////
 
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { CameraControls } from "three-stdlib";
-import { useTime } from "framer-motion";
 
-const TCASVisualizer: React.FC<any> = ({
-  writingTransition,
+/////////////////////////////////////
+// INTERFACE: TCAS PLANET VISUALIZER
+/////////////////////////////////////
+
+interface TCASPlanetVisualizerProps {
+  loading: boolean;
+  setWritingTransition: (writing) => void;
+}
+
+const TCASPlanetVisualizer: React.FC<TCASPlanetVisualizerProps> = ({
   loading,
   setWritingTransition,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const planetRotationRef = useRef(0.25);
-  const planetScaleRef = useRef(1); // Starts at normal scale
+  const planetRotationRef = useRef<number>(0.25);
+  const planetScaleRef = useRef(1);
   const sphereRef = useRef<THREE.Mesh | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 
   useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      // Optional: check scroll direction or zoom threshold here
-      transitionToWriting();
-      window.removeEventListener("wheel", handleWheel); // Only trigger once
-    };
+    if (!loading) {
+      const handleWheel = (e: WheelEvent) => {
+        transitionToWriting();
+        window.removeEventListener("wheel", handleWheel);
+      };
 
-    window.addEventListener("wheel", handleWheel, { passive: true });
+      window.addEventListener("wheel", handleWheel, { passive: true });
 
-    return () => window.removeEventListener("wheel", handleWheel);
-  }, []);
-
-  const transitionToWriting = () => {
-    for (let i = 0; i < 200; i++) {
-      setTimeout(() => {
-        planetRotationRef.current += 0.1;
-        planetScaleRef.current = Math.max(0, planetScaleRef.current - 0.005);
-      }, i * 10);
+      return () => window.removeEventListener("wheel", handleWheel);
     }
-
-    if (controlsRef.current) {
-      controlsRef.current.enableZoom = false;
-      controlsRef.current.enablePan = false; // optional: also disable panning
-    }
-
-    setWritingTransition(true);
-
-    setTimeout(() => {
-      const loadingCanvas = document.getElementById("loading-canvas");
-      if (loadingCanvas) loadingCanvas.remove();
-    }, 1000); // delay 1 second before removing
-  };
+  }, [loading]);
 
   useEffect(() => {
     if (loading) return;
@@ -65,11 +52,10 @@ const TCASVisualizer: React.FC<any> = ({
     );
     camera.position.set(0, 15, 50);
 
-    //make it 100vh
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.physicallyCorrectLights = true;
+    // renderer.physicallyCorrectLights = true;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     if (containerRef.current)
@@ -219,6 +205,31 @@ const TCASVisualizer: React.FC<any> = ({
     };
   }, [loading]);
 
+  /////////////////////////////////////
+  // FUNCTION: TRANSITION TO WRITING
+  /////////////////////////////////////
+
+  const transitionToWriting = (): void => {
+    for (let i = 0; i < 200; i++) {
+      setTimeout(() => {
+        planetRotationRef.current += 0.1;
+        planetScaleRef.current = Math.max(0, planetScaleRef.current - 0.005);
+      }, i * 10);
+    }
+
+    if (controlsRef.current) {
+      controlsRef.current.enableZoom = false;
+      controlsRef.current.enablePan = false;
+    }
+
+    setWritingTransition(true);
+
+    setTimeout(() => {
+      const loadingCanvas = document.getElementById("loading-canvas");
+      if (loadingCanvas) loadingCanvas.remove();
+    }, 1000);
+  };
+
   return (
     <div
       id="tcas-planet-canvas"
@@ -231,4 +242,8 @@ const TCASVisualizer: React.FC<any> = ({
   );
 };
 
-export default TCASVisualizer;
+/////////////////////////////////////
+// EXPORTING TCAS PLANET VISUALIZER
+/////////////////////////////////////
+
+export default TCASPlanetVisualizer;

@@ -12,9 +12,9 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <div className="w-full h-full">
-      <div className="dm-sans-normal self-stretch mt-32 w-full bg-[#CB6CE6] min-h-[1px] max-md:mt-10 max-md:max-w-full" />
-      <div className="self-start mt-11 ml-16 text-base font-semibold tracking-tight leading-9 text-white max-md:mt-10 max-md:max-w-full">
-        Made by <span className="text-[#CB6CE6]">Neel Bansal</span>{" "}
+      <div className="self-stretch mt-32 w-full bg-gray-600 min-h-[1px] max-md:mt-10 max-md:max-w-full" />
+      <div className="self-start mt-11 ml-16 leading-9 text-black max-md:mt-10 max-md:max-w-full flex flex-row space-x-1">
+        <p>Made by</p> <span className="text-gray-600">Neel Bansal</span>{" "}
         <Link to="/bibliographies">— Copyright {new Date().getFullYear()}</Link>
       </div>
     </div>

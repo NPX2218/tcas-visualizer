@@ -1,7 +1,15 @@
+/////////////////////////////////////
+// IMPORTING MODULES
+/////////////////////////////////////
+
 import React from "react";
 import CenteredLatex from "../../components/CenteredLatex";
 
-const TCASWriting = () => {
+/////////////////////////////////////
+// FUNCTION: TCAS WRITING
+/////////////////////////////////////
+
+const TCASExplanationSection = () => {
   return (
     <div className="w-full px-4 md:px-8 lg:px-16 py-8 max-w-screen-lg mx-auto">
       <section id="introduction">
@@ -44,4 +52,8 @@ const TCASWriting = () => {
   );
 };
 
-export default TCASWriting;
+/////////////////////////////////////
+// EXPORTING TCAS WRITING
+/////////////////////////////////////
+
+export default TCASExplanationSection;

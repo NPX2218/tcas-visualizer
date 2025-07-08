@@ -4,12 +4,11 @@
 
 import React, { useEffect, useState } from "react";
 
-import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import LocomotiveScroll from "locomotive-scroll";
 import LoadingScreen from "./LoadingScreen";
-import TCASVisualizer from "./TCASVisualizer";
-import TCASWriting from "./TCASWriting";
+import TCASPlanetVisualizer from "./TCASPlanetVisualizer";
+import TCASExplanationSection from "./TCASExplanationSection";
 var Latex = require("react-latex");
 
 /////////////////////////////////////
@@ -33,8 +32,8 @@ const Home = ({ scroll }: Props) => {
     if (writingTransition) {
       const timeout = setTimeout(() => {
         setDelayedReveal(true);
-      }, 3000); // 3 seconds
-      return () => clearTimeout(timeout); // cleanup
+      }, 2000);
+      return () => clearTimeout(timeout);
     }
   }, [writingTransition]);
 
@@ -45,15 +44,15 @@ const Home = ({ scroll }: Props) => {
         loading={loading}
         setLoading={setLoading}
       >
-        <TCASVisualizer
+        <TCASPlanetVisualizer
           loading={loading}
-          writingTransition={writingTransition}
           setWritingTransition={setWritingTransition}
         />
       </LoadingScreen>
       {delayedReveal && (
         <div>
-          <TCASWriting />
+          <TCASExplanationSection />
+          <Footer />
         </div>
       )}
     </div>
