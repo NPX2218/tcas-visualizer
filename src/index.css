@@ -11,6 +11,12 @@
   font-weight: 303;
   font-style: normal;
 }
+
+p {
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 200;
+}
 .inter-font {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
@@ -18,7 +24,6 @@
   font-style: normal;
 }
 
-p,
 input,
 div {
   font-family: "DM Sans", sans-serif;

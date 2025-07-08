@@ -5,9 +5,53 @@ import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { CameraControls } from "three-stdlib";
+import { useTime } from "framer-motion";
 
-const TCASVisualizer: React.FC<any> = ({ loading }) => {
+const TCASVisualizer: React.FC<any> = ({
+  writingTransition,
+  loading,
+  setWritingTransition,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const planetRotationRef = useRef(0.25);
+  const planetScaleRef = useRef(1); // Starts at normal scale
+  const sphereRef = useRef<THREE.Mesh | null>(null);
+  const controlsRef = useRef<OrbitControls | null>(null);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      // Optional: check scroll direction or zoom threshold here
+      transitionToWriting();
+      window.removeEventListener("wheel", handleWheel); // Only trigger once
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: true });
+
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, []);
+
+  const transitionToWriting = () => {
+    for (let i = 0; i < 200; i++) {
+      setTimeout(() => {
+        planetRotationRef.current += 0.1;
+        planetScaleRef.current = Math.max(0, planetScaleRef.current - 0.005);
+      }, i * 10);
+    }
+
+    if (controlsRef.current) {
+      controlsRef.current.enableZoom = false;
+      controlsRef.current.enablePan = false; // optional: also disable panning
+    }
+
+    setWritingTransition(true);
+
+    setTimeout(() => {
+      const loadingCanvas = document.getElementById("loading-canvas");
+      if (loadingCanvas) loadingCanvas.remove();
+    }, 1000); // delay 1 second before removing
+  };
 
   useEffect(() => {
     if (loading) return;
@@ -21,7 +65,7 @@ const TCASVisualizer: React.FC<any> = ({ loading }) => {
     );
     camera.position.set(0, 15, 50);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    //make it 100vh
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -51,6 +95,7 @@ const TCASVisualizer: React.FC<any> = ({ loading }) => {
     controls.target.set(0, 0, 0);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
+    controlsRef.current = controls; // ⬅️ store reference
 
     const clock = new THREE.Clock();
 
@@ -95,7 +140,10 @@ const TCASVisualizer: React.FC<any> = ({ loading }) => {
 
     const animate = () => {
       const delta = clock.getDelta();
-
+      if (sphere) {
+        sphere.rotation.y = planetRotationRef.current;
+        sphere.scale.setScalar(planetScaleRef.current);
+      }
       otherPlanes.forEach((p) => {
         const plane = p.group;
         plane.position.set(0, 0, 0);
@@ -131,7 +179,7 @@ const TCASVisualizer: React.FC<any> = ({ loading }) => {
         ),
       };
 
-      const sphere = new THREE.Mesh(
+      sphere = new THREE.Mesh(
         new THREE.SphereGeometry(10, 70, 70),
         new THREE.MeshPhysicalMaterial({
           map: textures.map,
@@ -147,6 +195,7 @@ const TCASVisualizer: React.FC<any> = ({ loading }) => {
       sphere.rotation.y += Math.PI * 1.25;
       sphere.receiveShadow = true;
       scene.add(sphere);
+      sphereRef.current = sphere;
 
       const gltf = await new GLTFLoader().loadAsync(
         "/tcas-visualizer/assets/plane/scene.glb"
@@ -160,6 +209,7 @@ const TCASVisualizer: React.FC<any> = ({ loading }) => {
 
       animate();
     };
+    let sphere: THREE.Mesh;
 
     load();
 
@@ -169,7 +219,16 @@ const TCASVisualizer: React.FC<any> = ({ loading }) => {
     };
   }, [loading]);
 
-  return <div ref={containerRef} style={{ width: "100vw", height: "100vh" }} />;
+  return (
+    <div
+      id="tcas-planet-canvas"
+      ref={containerRef}
+      style={{
+        width: "100vw",
+        height: "100vh",
+      }}
+    ></div>
+  );
 };
 
 export default TCASVisualizer;

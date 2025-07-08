@@ -15,7 +15,7 @@ const Router: React.FC = (): JSX.Element => {
   const scrollRef = useRef(null);
   useEffect(() => {
     if (scrollRef.current) {
-      import("locomotive-scroll").then((locomotiveModule) => {
+      /* import("locomotive-scroll").then((locomotiveModule) => {
         const ScrollEl = scrollRef.current as any;
         const newScroll = new locomotiveModule.default({
           el: ScrollEl,
@@ -29,7 +29,7 @@ const Router: React.FC = (): JSX.Element => {
         new ResizeObserver(() => newScroll.update()).observe(ScrollEl);
 
         return () => newScroll.destroy();
-      });
+      });*/
     }
   }, []);
 

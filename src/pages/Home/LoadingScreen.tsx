@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   Scene,
@@ -36,13 +36,23 @@ const letterVariants: any = {
     x: "200%",
     transition: { duration: 1.2, ease: "easeInOut" },
   },
+  back: {
+    x: 0,
+    transition: { duration: 1.2, ease: "easeInOut" },
+  },
 };
 
-const LoadingScreen: React.FC<any> = ({ loading, setLoading, children }) => {
+const LoadingScreen: React.FC<any> = ({
+  loading,
+  setLoading,
+  children,
+  writingTransition,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!loading) return;
-    // Scene setup
+
     const scene = new Scene();
     const camera = new PerspectiveCamera(
       45,
@@ -54,7 +64,6 @@ const LoadingScreen: React.FC<any> = ({ loading, setLoading, children }) => {
 
     const renderer = new WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    // renderer.outputEncoding = SRGBColorSpace;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
     renderer.toneMapping = ACESFilmicToneMapping;
@@ -63,12 +72,10 @@ const LoadingScreen: React.FC<any> = ({ loading, setLoading, children }) => {
       containerRef.current.appendChild(renderer.domElement);
     }
 
-    // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
 
-    // Lights
     const sunLight = new DirectionalLight("#FFFFFF", 2);
     sunLight.position.set(10, 20, 10);
     sunLight.castShadow = true;
@@ -78,7 +85,6 @@ const LoadingScreen: React.FC<any> = ({ loading, setLoading, children }) => {
     fillLight.position.set(0, -10, -10);
     scene.add(fillLight);
 
-    // Loaders
     const textureLoader = new TextureLoader();
     const gltfLoader = new GLTFLoader();
 
@@ -143,14 +149,17 @@ const LoadingScreen: React.FC<any> = ({ loading, setLoading, children }) => {
             p1.velocity.y = 0;
             p2.velocity.y = 0;
           }
+
           setPlaneColor(p1);
           setPlaneColor(p2);
+
           if (dist > 90) {
-            setLoading(false);
             setLoading(false);
             p1.group.visible = false;
             p2.group.visible = false;
-            renderer.setAnimationLoop(null); // ⛔ Stop animation
+            renderer.setAnimationLoop(null);
+            const loadingCanvas = document.getElementById("loading-canvas");
+            if (loadingCanvas) loadingCanvas.remove();
           }
         }
       }
@@ -237,6 +246,13 @@ const LoadingScreen: React.FC<any> = ({ loading, setLoading, children }) => {
     };
   }, []);
 
+  // Determine current animation state
+  const getLetterState = (side: "left" | "right") => {
+    if (loading) return "initial";
+    if (writingTransition) return "back";
+    return side;
+  };
+
   return (
     <div
       style={{
@@ -247,58 +263,79 @@ const LoadingScreen: React.FC<any> = ({ loading, setLoading, children }) => {
       }}
     >
       {/* Background TCAS text */}
-      <div
-        className={`${"w-[100%] h-[100%] rounded-full "} flex items-center justify-center `}
-      >
-        <div
-          className={` ${loading ? "hidden" : "flex z-10"}   rounded-full z-0`}
-        >
+      <div className="w-full h-full flex items-center justify-center">
+        <div className={`${loading ? "hidden" : "flex z-10"} rounded-full z-0`}>
           {children}
         </div>
 
-        <div
-          className="absolute top-1/2 left-1/2 flex gap-6 text-[12rem] font-bold text-gray-300 pointer-events-none"
-          style={{ transform: "translate(-50%, -50%)", zIndex: 10 }}
-        >
+        <div className="absolute top-1/2 left-1/2 flex gap-6 text-[10rem] md:text-[12rem] font-bold text-gray-300 pointer-events-none origin-center transform -translate-x-1/2 -translate-y-1/2 md:rotate-0 rotate-90 z-10">
           <motion.span
             variants={letterVariants}
             initial="initial"
-            animate={loading ? "initial" : "left"}
+            animate={getLetterState("left")}
           >
             T
           </motion.span>
           <motion.span
             variants={letterVariants}
             initial="initial"
-            animate={loading ? "initial" : "left"}
+            animate={getLetterState("left")}
           >
             C
           </motion.span>
           <motion.span
             variants={letterVariants}
             initial="initial"
-            animate={loading ? "initial" : "right"}
+            animate={getLetterState("right")}
           >
             A
           </motion.span>
           <motion.span
             variants={letterVariants}
             initial="initial"
-            animate={loading ? "initial" : "right"}
+            animate={getLetterState("right")}
           >
             S
           </motion.span>
         </div>
       </div>
-
-      {/* Three.js container (on top) */}
+      <div>
+        {!writingTransition && !loading && (
+          <div
+            className="absolute right-6 bottom-10 text-black text-lg flex flex-col items-center gap-2 z-50"
+            style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+          >
+            <motion.div
+              initial={{ y: 0 }}
+              animate={{ y: [0, -10, 0] }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="text-sm"
+            >
+              ↓
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{ duration: 10, repeat: Infinity }}
+            >
+              Scroll Down
+            </motion.div>
+          </div>
+        )}
+      </div>
+      {/* Three.js canvas */}
       <div
+        id="loading-canvas"
         ref={containerRef}
         style={{
           position: "absolute",
           top: 0,
           left: 0,
-          width: "100%",
+          width: "80%",
           height: "100%",
           zIndex: 2,
         }}
