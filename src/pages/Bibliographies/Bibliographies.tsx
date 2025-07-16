@@ -10,14 +10,14 @@ import { bibliographiesData } from "../../data/bibliographies";
 // COMPONENT: BIBLIOGRAPHIES
 /////////////////////////////////////
 
-const Bibliographies = ({ scroll }: any) => {
+const Bibliographies = () => {
   return (
     <div className="flex flex-col items-center py-12 bg-white">
       <div className="flex flex-col items-center self-stretch px-20 mt-1.5 w-full max-md:px-5 max-md:max-w-full">
         <br />
         <br />
-        <div className="hammersmith-one-regular text-2xl text-black max-md:max-w-full max-md:text-4xl">
-          Bibliographies
+        <div className="text-2xl text-black max-md:max-w-full max-md:text-4xl">
+          <h3>Bibliographies</h3>
         </div>
       </div>
       <br />

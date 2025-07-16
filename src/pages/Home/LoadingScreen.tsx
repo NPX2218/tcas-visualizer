@@ -34,11 +34,11 @@ const basePath = "/tcas-visualizer";
 const letterVariants: Variants = {
   initial: { x: 0 },
   left: {
-    x: "-200%",
+    x: "-220%",
     transition: { duration: 1.2, ease: "easeInOut" },
   },
   right: {
-    x: "200%",
+    x: "220%",
     transition: { duration: 1.2, ease: "easeInOut" },
   },
   back: {
@@ -315,7 +315,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
           {children}
         </div>
 
-        <div className="absolute top-1/2 left-1/2 flex gap-6 text-[10rem] md:text-[12rem] font-bold text-gray-300 pointer-events-none origin-center transform -translate-x-1/2 -translate-y-1/2 md:rotate-0 rotate-90 z-10">
+        <div className="absolute top-1/2 left-1/2 flex gap-6 text-[8rem] md:text-[12rem] font-bold text-gray-300 pointer-events-none origin-center transform -translate-x-1/2 -translate-y-1/2 md:rotate-0 rotate-90 z-10">
           <motion.span
             variants={letterVariants}
             initial="initial"

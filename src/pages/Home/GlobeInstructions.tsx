@@ -1,9 +1,47 @@
+/////////////////////////////////////
+// IMPORTING LIBRARIES
+/////////////////////////////////////
+
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const GlobeInstructions = ({ writingTransition, loading }) => {
-  const [showSpin, setShowSpin] = useState(true);
+/////////////////////////////////////
+// INTERFACE: GLOBE INSTRUCTIONS PROPS
+/////////////////////////////////////
 
+interface GlobeInstructionsProps {
+  writingTransition: boolean;
+  loading: boolean;
+}
+
+/////////////////////////////////////
+// COMPONENT: GLOBE INSTRUCTIONS
+/////////////////////////////////////
+
+const GlobeInstructions = ({
+  writingTransition,
+  loading,
+}: GlobeInstructionsProps): JSX.Element => {
+  const [showSpin, setShowSpin] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile devices by screen width
+  useEffect(() => {
+    /////////////////////////////////////
+    // FUNCTION: CHECK MOBILE
+    /////////////////////////////////////
+
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile(); // initial check
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Start countdown once loading is false
   useEffect(() => {
     if (!loading) {
       const timer = setTimeout(() => {
@@ -15,15 +53,15 @@ const GlobeInstructions = ({ writingTransition, loading }) => {
 
   return (
     <div>
-      {/* AnimatePresence handles exit animations */}
+      {/* Spin the Globe - only on non-mobile devices */}
       <AnimatePresence>
-        {!writingTransition && !loading && showSpin && (
+        {!isMobile && !writingTransition && !loading && showSpin && (
           <motion.div
             key="spin"
             className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-center z-50 flex flex-col items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, y: 10 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.8 }}
           >
             <motion.div
@@ -50,7 +88,7 @@ const GlobeInstructions = ({ writingTransition, loading }) => {
       </AnimatePresence>
 
       {/* Scroll Down - appears after Spin fades out */}
-      {!writingTransition && !loading && !showSpin && (
+      {!writingTransition && !loading && (!showSpin || isMobile) && (
         <div
           className="absolute right-6 bottom-14 text-black text-lg flex items-center gap-2 z-50"
           style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
@@ -78,5 +116,9 @@ const GlobeInstructions = ({ writingTransition, loading }) => {
     </div>
   );
 };
+
+/////////////////////////////////////
+// EXPORTING GLOBE INSTRUCTIONS
+/////////////////////////////////////
 
 export default GlobeInstructions;

@@ -15,13 +15,13 @@ export const bibliographiesData = [
     link: "https://chatgpt.com/",
   },
   {
-    name: "Derivation of Lagrange",
-    author: "TheCaribbeanBookworm",
-    link: "https://rb.gy/l6w3wa",
-  },
-  {
     name: "TCAS Wikipedia",
     author: "",
     link: "https://en.wikipedia.org/wiki/Traffic_collision_avoidance_system",
+  },
+  {
+    name: "TCAS PDF",
+    author: "FAA",
+    link: "https://www.faa.gov/documentlibrary/media/advisory_circular/tcas%20ii%20v7.1%20intro%20booklet.pdf",
   },
 ];

@@ -3,27 +3,17 @@
 /////////////////////////////////////
 
 import React, { useEffect, useState } from "react";
-
 import Footer from "../../components/Footer/Footer";
 import LocomotiveScroll from "locomotive-scroll";
 import LoadingScreen from "./LoadingScreen";
 import TCASPlanetVisualizer from "./TCASPlanetVisualizer";
 import TCASExplanationSection from "./TCASExplanationSection";
-var Latex = require("react-latex");
-
-/////////////////////////////////////
-// INTERFACE: PROPS
-/////////////////////////////////////
-
-interface Props {
-  scroll?: LocomotiveScroll | null;
-}
 
 /////////////////////////////////////
 // COMPONENT: HOME
 /////////////////////////////////////
 
-const Home = ({ scroll }: Props) => {
+const Home = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [writingTransition, setWritingTransition] = useState<boolean>(false);
   const [delayedReveal, setDelayedReveal] = useState(false);

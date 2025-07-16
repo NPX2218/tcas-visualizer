@@ -2,8 +2,8 @@
 // IMPORTING LIBRARIES
 /////////////////////////////////////
 
-import React, { useState, useEffect, lazy, Suspense, useRef } from "react";
-import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
+import React, { Suspense } from "react";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import Bibliographies from "../pages/Bibliographies/Bibliographies";
 /////////////////////////////////////
@@ -11,37 +11,15 @@ import Bibliographies from "../pages/Bibliographies/Bibliographies";
 /////////////////////////////////////
 
 const Router: React.FC = (): JSX.Element => {
-  const [scroll, setScroll] = useState<LocomotiveScroll | null>(null);
-  const scrollRef = useRef(null);
-  useEffect(() => {
-    if (scrollRef.current) {
-      /* import("locomotive-scroll").then((locomotiveModule) => {
-        const ScrollEl = scrollRef.current as any;
-        const newScroll = new locomotiveModule.default({
-          el: ScrollEl,
-          smooth: true,
-          multiplier: 1.2,
-          class: "is-reveal",
-        });
-
-        setScroll(newScroll);
-
-        new ResizeObserver(() => newScroll.update()).observe(ScrollEl);
-
-        return () => newScroll.destroy();
-      });*/
-    }
-  }, []);
-
   return (
     <HashRouter>
       <Routes>
         <Route
           path="/"
           element={
-            <div ref={scrollRef}>
+            <div>
               <Suspense fallback={<div>Loading...</div>}>
-                <Home scroll={scroll} />
+                <Home />
               </Suspense>
             </div>
           }
@@ -49,9 +27,9 @@ const Router: React.FC = (): JSX.Element => {
         <Route
           path="/bibliographies"
           element={
-            <div ref={scrollRef}>
+            <div>
               <Suspense fallback={<div>Loading...</div>}>
-                <Bibliographies scroll={scroll} />
+                <Bibliographies />
               </Suspense>
             </div>
           }
@@ -60,5 +38,9 @@ const Router: React.FC = (): JSX.Element => {
     </HashRouter>
   );
 };
+
+/////////////////////////////////////
+// EXPORTING ROUTER
+/////////////////////////////////////
 
 export default Router;

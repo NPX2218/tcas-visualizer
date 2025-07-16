@@ -17,6 +17,8 @@ const Footer = () => {
         <p>Made by</p> <span className="text-gray-600">Neel Bansal</span>{" "}
         <Link to="/bibliographies">— Copyright {new Date().getFullYear()}</Link>
       </div>
+      <br />
+      <br />
     </div>
   );
 };
