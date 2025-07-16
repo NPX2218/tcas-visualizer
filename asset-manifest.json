@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/tcas-visualizer/static/css/main.b956fcba.css",
-    "main.js": "/tcas-visualizer/static/js/main.b126b6d8.js",
+    "main.css": "/tcas-visualizer/static/css/main.c9cb3544.css",
+    "main.js": "/tcas-visualizer/static/js/main.50771fc1.js",
     "index.html": "/tcas-visualizer/index.html",
-    "main.b956fcba.css.map": "/tcas-visualizer/static/css/main.b956fcba.css.map",
-    "main.b126b6d8.js.map": "/tcas-visualizer/static/js/main.b126b6d8.js.map"
+    "main.c9cb3544.css.map": "/tcas-visualizer/static/css/main.c9cb3544.css.map",
+    "main.50771fc1.js.map": "/tcas-visualizer/static/js/main.50771fc1.js.map"
   },
   "entrypoints": [
-    "static/css/main.b956fcba.css",
-    "static/js/main.b126b6d8.js"
+    "static/css/main.c9cb3544.css",
+    "static/js/main.50771fc1.js"
   ]
 }
