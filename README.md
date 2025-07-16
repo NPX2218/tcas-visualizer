@@ -63,8 +63,6 @@ To interact with the models:
 
 1. Click and drag to rotate the 3D scene.
 2. Scroll to zoom in/out.
-3. Press "Play" to simulate aircraft motion and see live alerts.
-4. Adjust parameters like speed, position, and altitude offset using the control panel.
 
 # 🧑‍💻 Author
 
